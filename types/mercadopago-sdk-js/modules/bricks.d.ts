@@ -32,6 +32,10 @@ declare namespace bricks {
     interface PaymentBrickCallbacks<BrickType>
         extends BrickCallbacks, Submit<BrickType>, BinChange, ReviewStepsCallbacks
     {}
+    interface CardPaymentBrickCallbacks<BrickType> extends BrickCallbacks, Submit<BrickType>, BinChange {}
+    interface BrandBrickCallbacks {
+        onReady?: () => void;
+    }
 
     interface DefaultAddress {
         streetName: string;
@@ -237,9 +241,10 @@ declare namespace bricks {
         callbacks: BrickType extends "wallet" ? WalletBrickCallbacks<BrickType>
             : BrickType extends "cardPayment" ? CardPaymentBrickCallbacks<BrickType>
             : BrickType extends "payment" ? PaymentBrickCallbacks<BrickType>
+            : BrickType extends "brand" ? BrandBrickCallbacks
             : BrickCallbacks;
         initialization?: BrickInitialization;
-        customization?: BrickCustomization;
+        customization?: BrickType extends "brand" ? BrandBrickCustomization : BrickCustomization;
     }
 
     interface BricksStyle {
@@ -433,10 +438,6 @@ declare namespace bricks {
         text?: BrandBrickTextCustomization;
         visual?: BrandBrickVisualCustomization;
         paymentMethods?: BrandBrickPaymentMethodCustomization;
-    }
-
-    interface BrandBrickCallbacks {
-        onReady?: () => void;
     }
 
     interface BrandBrickTextCustomization {

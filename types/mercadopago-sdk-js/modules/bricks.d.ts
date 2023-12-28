@@ -8,7 +8,7 @@ declare namespace bricks {
     interface Submit<BrickType> {
         onSubmit: (
             formData: FormData<BrickType>,
-            additionalData?: AdditionalData<BrickType>,
+            additionalData?: AdditionalData<BrickType>
         ) => BrickType extends "wallet" ? Promise<string> : Promise<void>;
     }
 
@@ -30,8 +30,10 @@ declare namespace bricks {
     interface WalletBrickCallbacks<BrickType> extends BrickCallbacks, Submit<BrickType> {}
     interface CardPaymentBrickCallbacks<BrickType> extends BrickCallbacks, Submit<BrickType>, BinChange {}
     interface PaymentBrickCallbacks<BrickType>
-        extends BrickCallbacks, Submit<BrickType>, BinChange, ReviewStepsCallbacks
-    {}
+        extends BrickCallbacks,
+            Submit<BrickType>,
+            BinChange,
+            ReviewStepsCallbacks {}
     interface CardPaymentBrickCallbacks<BrickType> extends BrickCallbacks, Submit<BrickType>, BinChange {}
     interface BrandBrickCallbacks {
         onReady?: () => void;
@@ -65,14 +67,14 @@ declare namespace bricks {
     }
 
     enum PaymentOption {
-        CREDIT_CARD_FORM = "creditCardForm",
-        DEBIT_CARD_FORM = "debitCardForm",
-        SAVED_CARD_FORM = "savedCardForm",
-        TICKET_FORM = "ticketForm",
-        BANK_TRANSFER_FORM = "bankTransferForm",
-        MERCADO_PAGO_FORM = "walletForm",
-        ONBOARDING_CREDITS_FORM = "creditForm",
-    }
+      CREDIT_CARD_FORM = "creditCardForm",
+      DEBIT_CARD_FORM = "debitCardForm",
+      SAVED_CARD_FORM = "savedCardForm",
+      TICKET_FORM = "ticketForm",
+      BANK_TRANSFER_FORM = "bankTransferForm",
+      MERCADO_PAGO_FORM = "walletForm",
+      ONBOARDING_CREDITS_FORM = "creditForm",
+  }
 
     interface PaymentOptions {
         [PaymentOption.CREDIT_CARD_FORM]?: boolean;
@@ -88,23 +90,11 @@ declare namespace bricks {
         [PaymentOption.SAVED_CARD_FORM]?: boolean;
     }
 
-    enum WalletButtonBackground {
-        MERCADO_PAGO_COLOR = "default",
-        BLACK = "black",
-        BLUE = "blue",
-        WHITE = "white",
-    }
+    type WalletButtonBackground = "default" | "black" | "blue" | "white";
 
-    enum WalletButtonValuePropColor {
-        WHITE = "white",
-        GREY = "grey",
-    }
+    type WalletButtonValuePropColor = "white" | "grey";
 
-    enum WalletButtonRedirectMode {
-        MODAL = "modal",
-        SELF = "self",
-        BLANK = "blank",
-    }
+    type WalletButtonRedirectMode = "modal" | "self" | "blank";
 
     interface BrickVisualCustomization {
         texts?: CustomizableTexts;
@@ -238,13 +228,23 @@ declare namespace bricks {
 
     interface BrickSettings<BrickType> {
         // For a more detailed view of each Brick`s supported settings, please check the documentation at: https://github.com/mercadopago/sdk-js/blob/main/API/bricks/index.md
-        callbacks: BrickType extends "wallet" ? WalletBrickCallbacks<BrickType>
-            : BrickType extends "cardPayment" ? CardPaymentBrickCallbacks<BrickType>
-            : BrickType extends "payment" ? PaymentBrickCallbacks<BrickType>
-            : BrickType extends "brand" ? BrandBrickCallbacks
+        callbacks: BrickType extends "wallet"
+            ? WalletBrickCallbacks<BrickType>
+            : BrickType extends "cardPayment"
+            ? CardPaymentBrickCallbacks<BrickType>
+            : BrickType extends "payment"
+            ? PaymentBrickCallbacks<BrickType>
+            : BrickType extends "brand"
+            ? BrandBrickCallbacks
             : BrickCallbacks;
         initialization?: BrickInitialization;
         customization?: BrickType extends "brand" ? BrandBrickCustomization : BrickCustomization;
+    }
+
+    interface BrandBrickSettings {
+        // For a more detailed view of each Brick`s supported settings, please check the documentation at: https://github.com/mercadopago/sdk-js/blob/main/API/bricks/index.md
+        callbacks?: BrandBrickCallbacks;
+        customization?: BrandBrickCustomization;
     }
 
     interface BricksStyle {
@@ -313,29 +313,32 @@ declare namespace bricks {
         entity_type?: EntityType;
     }
 
-    enum PaymentType {
-        CREDIT_CARD = "credit_card",
-        DEBIT_CARD = "debit_card",
-        ICKET = "ticket",
-        BANK_TRANSFER = "bank_transfer",
-        WALLET_PURCHASE = "wallet_purchase",
-        ONBOARDING_CREDITS = "onboarding_credits",
-        ATM = "atm",
-        ATM_ONLINE = "atm_online",
-        NONE = "",
-    }
+    type PaymentType =
+        | "credit_card"
+        | "debit_card"
+        | "ticket"
+        | "bank_transfer"
+        | "wallet_purchase"
+        | "onboarding_credits"
+        | "atm"
+        | "atm_online"
+        | "";
 
     interface SavedCardPayer {
         type: "customer";
         id: string;
     }
 
-    type FormData<BrickType> = BrickType extends "cardPayment" ? CardFormData
-        : BrickType extends "payment" ? PaymentFormData
+    type FormData<BrickType> = BrickType extends "cardPayment"
+        ? CardFormData
+        : BrickType extends "payment"
+        ? PaymentFormData
         : null;
 
-    type AdditionalData<BrickType> = BrickType extends "cardPayment" ? AdditionalCardFormData
-        : BrickType extends "payment" ? AdditionalPaymentFormData
+    type AdditionalData<BrickType> = BrickType extends "cardPayment"
+        ? AdditionalCardFormData
+        : BrickType extends "payment"
+        ? AdditionalPaymentFormData
         : null;
 
     interface CardFormData {
@@ -449,37 +452,15 @@ declare namespace bricks {
         align?: BrandBrickAlignment;
     }
 
-    enum BrandBrickValueProps {
-        INSTALLMENTS = "installments",
-        PAYMENT_METHODS = "payment_methods",
-        SECURITY = "security",
-        PAYMENT_METHODS_LOGOS = "payment_methods_logos",
-        CREDITS = "credits",
-    }
+    type BrandBrickValueProps = "installments" | "payment_methods" | "security" | "payment_methods_logos" | "credits";
 
-    enum BrandBrickTextSizes {
-        EXTRA_SMALL = "extra_small",
-        SMALL = "small",
-        MEDIUM = "medium",
-        LARGE = "large",
-    }
+    type BrandBrickTextSizes = "extra_small" | "small" | "medium" | "large";
 
-    enum BrandBrickFontWeight {
-        REGULAR = "regular",
-        SEMIBOLD = "semibold",
-    }
+    type BrandBrickFontWeight = "regular" | "semibold";
 
-    enum BrandBrickTextColor {
-        PRIMARY = "primary",
-        SECONDARY = "secondary",
-        INVERTED = "inverted",
-    }
+    type BrandBrickTextColor = "primary" | "secondary" | "inverted";
 
-    enum BrandBrickAlignment {
-        LEFT = "left",
-        CENTER = "center",
-        RIGHT = "right",
-    }
+    type BrandBrickAlignment = "left" | "center" | "right";
 
     interface BrandBrickVisualCustomization {
         hideMercadoPagoLogo?: boolean;
@@ -493,18 +474,14 @@ declare namespace bricks {
         horizontalPadding?: string;
     }
 
-    enum BrandBrickBackgroundColor {
-        WHITE = "white",
-        MERCADO_PAGO_PRIMARY = "mercado_pago_primary",
-        MERCADO_PAGO_SECONDARY = "mercado_pago_secondary",
-        BLACK = "black",
-        TRANSPARENT = "transparent",
-    }
+    type BrandBrickBackgroundColor =
+        | "white"
+        | "mercado_pago_primary"
+        | "mercado_pago_secondary"
+        | "black"
+        | "transparent";
 
-    enum BrandBrickBorderColor {
-        DARK = "dark",
-        LIGHT = "light",
-    }
+    type BrandBrickBorderColor = "dark" | "light";
 
     interface BrandBrickPaymentMethodCustomization {
         excludedPaymentMethods?: BrandBrickPaymentMethods[];
@@ -513,31 +490,24 @@ declare namespace bricks {
         interestFreeInstallments?: boolean;
     }
 
-    enum BrandBrickPaymentMethods {
-        MASTER = "master",
-        VISA = "visa",
-        AMEX = "amex",
-        NARANJA = "naranja",
-        MAESTRO = "maestro",
-        CABAL = "cabal",
-        CENCOSUD = "cencosud",
-        CORDOBESA = "cordobesa",
-        ARGENCARD = "argencard",
-        DINERS = "diners",
-        TARSHOP = "tarshop",
-        CMR = "cmr",
-        RAPIPAGO = "rapipago",
-        PAGOFACIL = "pagofacil",
-        MERCADOPAGO = "mercadopago",
-    }
+    type BrandBrickPaymentMethods =
+        | "master"
+        | "visa"
+        | "amex"
+        | "naranja"
+        | "maestro"
+        | "cabal"
+        | "cencosud"
+        | "cordobesa"
+        | "argencard"
+        | "diners"
+        | "tarshop"
+        | "cmr"
+        | "rapipago"
+        | "pagofacil"
+        | "mercadopago";
 
-    enum BrandBrickPaymentTypes {
-        CREDIT_CARD = "credit_card",
-        DEBIT_CARD = "debit_card",
-        TICKET = "ticket",
-        ACCOUNT_MONEY = "account_money",
-        MERCADO_CREDITO = "mercado_credito",
-    }
+    type BrandBrickPaymentTypes = "credit_card" | "debit_card" | "ticket" | "account_money" | "mercado_credito";
 
     interface CardPaymentController {
         unmount: () => void;
@@ -573,12 +543,16 @@ declare namespace bricks {
         create<BrickType extends BrickTypes>(
             brick: BrickType,
             containerId: string,
-            settings?: BrickSettings<BrickType>,
+            settings?: BrickType extends "brand" ? BrandBrickSettings : BrickSettings<BrickType>
         ): Promise<
-            BrickType extends "cardPayment" ? CardPaymentController
-                : BrickType extends "payment" ? PaymentController
-                : BrickType extends "statusScreen" ? StatusScreenController
-                : BrickType extends "brand" ? BrandController
+            BrickType extends "cardPayment"
+                ? CardPaymentController
+                : BrickType extends "payment"
+                ? PaymentController
+                : BrickType extends "statusScreen"
+                ? StatusScreenController
+                : BrickType extends "brand"
+                ? BrandController
                 : WalletController
         >;
     }
